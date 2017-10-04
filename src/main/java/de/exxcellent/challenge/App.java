@@ -113,19 +113,45 @@ class AllRecords{
 	}
 }
 
+//specialized class for weather log
+class WeatherLog extends AllRecords{
+	//specialized function to find the day with smallest temprature spread
+	String dayWithSmallestTempSpread(){
+		Record s = recWithSmallestDifference("MxT", "MnT");
+		
+		if(s == null)
+			return null;
+		return s.getData("Day");
+	}
+}
+
+//specialized class for EPL teams records
+class EPLRecords extends AllRecords{
+	//specialized function to find the team with smallest goal difference
+	String teamWithSmallesGoalSpread(){
+		Record s = recWithSmallestDifference("Goals", "Goals Allowed");
+		
+		if(s == null)
+			return null;
+		return s.getData("Team");
+	}
+}
+
 public final class App {
 
     public static void main(String... args) {
 
         // Your preparation code …
-		AllRecords weatherRecords = new AllRecords();
+		WeatherLog wl = new WeatherLog();
 		
 		//the input files can also be taken as input params to the program.
-		weatherRecords.getInputData(System.getProperty("user.dir") + "/target/classes/de/exxcellent/challenge/weather.csv");
-		Record smallestDiffDay = weatherRecords.recWithSmallestDifference("MxT","MnT");
-
-        String dayWithSmallestTempSpread = smallestDiffDay.getData("Day");     // Your day analysis function call …
-        String teamWithSmallesGoalSpread = "A good team"; // Your goal analysis function call …
+		wl.getInputData(System.getProperty("user.dir") + "/target/classes/de/exxcellent/challenge/weather.csv");
+		
+		EPLRecords epl = new EPLRecords();
+		epl.getInputData(System.getProperty("user.dir") + "/target/classes/de/exxcellent/challenge/football.csv");
+		
+		String dayWithSmallestTempSpread = wl.dayWithSmallestTempSpread();     // Your day analysis function call …
+        String teamWithSmallesGoalSpread = epl.teamWithSmallesGoalSpread(); // Your goal analysis function call …
 
         System.out.printf("Day with smallest temperature spread : %s%n", dayWithSmallestTempSpread);
         System.out.printf("Team with smallest goal spread       : %s%n", teamWithSmallesGoalSpread);
